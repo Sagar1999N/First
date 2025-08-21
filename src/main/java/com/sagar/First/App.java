@@ -20,7 +20,7 @@ public class App {
 		System.out.println(sp.version());
 		System.out.println(VersionInfo.getVersion());
 		System.out.println(sp.sparkContext().appName());
-		Dataset<Row> employees = sp.read().option("header", true).csv("./resources/in/employees.csv");
+		Dataset<Row> employees = sp.read().option("header", true).csv("./data/input/employees.csv");
 		employees = employees.withColumn("salary", functions.col("salary").cast(DataTypes.IntegerType));
 		employees.show(10, false);
 		employees.printSchema();
@@ -28,7 +28,7 @@ public class App {
 		RichEmployees.show(10, false);
 		Dataset<Row> GroupedSalary = employees.groupBy("department").agg(functions.avg("salary").as("avg_salary"));
 		GroupedSalary.show(10, false);
-		GroupedSalary.write().mode(SaveMode.Overwrite).parquet("./resources/out");
+		GroupedSalary.write().mode(SaveMode.Overwrite).parquet("./data/out");
 		System.out.println("writing complete");
 	}
 }
